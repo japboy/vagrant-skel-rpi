@@ -1,0 +1,26 @@
+---
+
+- command: uname -a
+  register: uname
+
+- command: lsb_release -a
+  register: lsb_release
+
+- command: cat /etc/debian_version
+  ignore_errors: true
+  register: debian
+
+- command: cat /etc/redhat-release
+  ignore_errors: true
+  register: redhat
+
+- debug: msg="{{ uname.stdout }}"
+
+- debug: msg="{{ item }}"
+  with_items: lsb_release.stdout_lines
+
+- debug: msg="{{ debian.stdout }}"
+  when: debian | success
+
+- debug: msg="{{ redhat.stdout }}"
+  when: redhat | success

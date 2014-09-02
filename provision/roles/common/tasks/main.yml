@@ -1,0 +1,10 @@
+---
+
+- include: ./raspbian.yml
+#- include: ./debug.yml
+
+- name: APT package installation
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - nodejs
+    - npm

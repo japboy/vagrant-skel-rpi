@@ -1,0 +1,25 @@
+---
+
+- name: APT package manager test
+  apt: name=git
+  ignore_errors: true
+  register: apt
+
+- name: APT depencencies installation
+  command: '{{ item }}'
+  with_items:
+    - apt-get update
+    - apt-get install -y python-dev python-distribute
+  when: apt | failed
+
+- name: Python pip installation
+  easy_install: name=pip
+
+- name: Python python-apt installation
+  pip: name=python-apt
+
+- name: APT python-pycurl installation
+  apt: name=python-pycurl
+
+- name: APT Raspbian repository installation
+  apt_repository: repo='deb-src http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi' state=present
